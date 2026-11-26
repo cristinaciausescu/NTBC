@@ -1,15 +1,41 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { feed } from '../data.js';
 import './feed.css';
 
-// Team feed with working Like and Reply buttons. State lives in the browser for now.
+const STORAGE_KEY = 'ntbc-feed-activity';
+
+// Read saved likes and replies from this browser, falling back to empty.
+function loadActivity() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return {
+      liked: saved?.liked ?? {},
+      replies: saved?.replies ?? {},
+    };
+  } catch {
+    return { liked: {}, replies: {} };
+  }
+}
+
+// Team feed with working Like and Reply buttons. Saved in this browser's localStorage.
 export default function Feed() {
-  const [liked, setLiked] = useState({});        // postId -> true
-  const [replies, setReplies] = useState({});    // postId -> [{ id, text, when }]
+  const [{ liked, replies }, setActivity] = useState(loadActivity);
   const [openReply, setOpenReply] = useState(null); // postId whose reply box is open
   const [draft, setDraft] = useState('');
 
-  const toggleLike = (id) => setLiked((prev) => ({ ...prev, [id]: !prev[id] }));
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ liked, replies }));
+    } catch {
+      /* storage unavailable: activity stays in memory only */
+    }
+  }, [liked, replies]);
+
+  const toggleLike = (id) =>
+    setActivity((prev) => ({
+      ...prev,
+      liked: { ...prev.liked, [id]: !prev.liked[id] },
+    }));
 
   const toggleReply = (id) => {
     setDraft('');
@@ -19,9 +45,12 @@ export default function Feed() {
   const sendReply = (id) => {
     const text = draft.trim();
     if (!text) return;
-    setReplies((prev) => ({
+    setActivity((prev) => ({
       ...prev,
-      [id]: [...(prev[id] ?? []), { id: Date.now(), text, when: 'Just now' }],
+      replies: {
+        ...prev.replies,
+        [id]: [...(prev.replies[id] ?? []), { id: Date.now(), text, when: 'Just now' }],
+      },
     }));
     setDraft('');
     setOpenReply(null);

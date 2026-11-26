@@ -126,7 +126,15 @@ export function NeedsYou({ onOpen }) {
             <h3>{item.title}</h3>
             <p className="muted small">{item.body}</p>
             <div className="task-xp">🏆 {item.xp} XP</div>
-            <a href="#">Take me there →</a>
+            <a
+              href="#tasks"
+              onClick={(e) => {
+                e.preventDefault();
+                onOpen?.('tasks');
+              }}
+            >
+              Take me there →
+            </a>
           </article>
         ))}
       </div>

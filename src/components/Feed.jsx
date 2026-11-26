@@ -62,7 +62,9 @@ export default function Feed() {
       <p className="muted">Latest updates from your team</p>
       {feed.map((post) => {
         const isLiked = Boolean(liked[post.id]);
+        const seededComments = post.comments ?? [];
         const postReplies = replies[post.id] ?? [];
+        const totalComments = seededComments.length + postReplies.length;
         const isReplying = openReply === post.id;
 
         return (
@@ -89,9 +91,20 @@ export default function Feed() {
                   aria-expanded={isReplying}
                   onClick={() => toggleReply(post.id)}
                 >
-                  💬 Reply{postReplies.length > 0 ? ` (${postReplies.length})` : ''}
+                  💬 Reply{totalComments > 0 ? ` (${totalComments})` : ''}
                 </button>
               </div>
+
+              {seededComments.length > 0 && (
+                <ul className="replies">
+                  {seededComments.map((c) => (
+                    <li key={`seed-${c.id}`}>
+                      <strong>{c.author}</strong> <span className="when">{c.when}</span>
+                      <p>{c.text}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
 
               {postReplies.length > 0 && (
                 <ul className="replies">

@@ -156,7 +156,8 @@ export function Milestones({ onOpen }) {
       </div>
       <p className="muted">Turn tasks into achievements!</p>
       <ol className="timeline">
-        {milestones.map((m) => (
+        {/* Next four milestones in order; the full list is on the milestones page. */}
+        {milestones.slice(0, 4).map((m) => (
           <li key={m.id} className={`stop ${m.tone}`}>
             <div className="dot">{m.count}</div>
             <div className="stop-label">{m.label}</div>

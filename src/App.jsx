@@ -3,7 +3,7 @@ import Header from './components/Header.jsx';
 import Sidebar from './components/Sidebar.jsx';
 import { SelectionPanel, PackagesCard } from './components/Packages.jsx';
 import Feed from './components/Feed.jsx';
-import { Banner, ProfileCard, WorkPackages, NeedsYou, Milestones, Badges, Missions, Leaderboard, Motivation } from './components/Widgets.jsx';
+import { Banner, ProfileCard, WorkPackages, NeedsYou, AllTasks, Milestones, Badges, Missions, Leaderboard, Motivation } from './components/Widgets.jsx';
 import { TasksPage, MilestonesPage } from './components/Pages.jsx';
 
 const STORAGE_KEY = 'ntbc-working-packages';
@@ -89,6 +89,7 @@ export default function App() {
           />
           <Banner />
           <NeedsYou onOpen={setView} completedIds={completedIds} onComplete={completeTask} />
+          <AllTasks completedIds={completedIds} />
           <Milestones onOpen={setView} />
           <Feed />
         </div>

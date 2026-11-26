@@ -3,6 +3,7 @@ import { feed } from '../data.js';
 import './feed.css';
 
 const STORAGE_KEY = 'ntbc-feed-activity';
+const PAGE_SIZE = 15; // posts shown before "Show more"
 
 // Read saved likes and replies from this browser, falling back to empty.
 function loadActivity() {
@@ -23,6 +24,7 @@ export default function Feed() {
   const [openReply, setOpenReply] = useState(null); // postId whose reply box is open
   const [draft, setDraft] = useState('');
   const [expanded, setExpanded] = useState({}); // postId -> comments list open
+  const [shown, setShown] = useState(PAGE_SIZE);
 
   useEffect(() => {
     try {
@@ -65,7 +67,7 @@ export default function Feed() {
     <section className="card">
       <h2>Feed</h2>
       <p className="muted">Latest updates from your team</p>
-      {feed.map((post) => {
+      {feed.slice(0, shown).map((post) => {
         const isLiked = Boolean(liked[post.id]);
         const seededComments = post.comments ?? [];
         const postReplies = replies[post.id] ?? [];
@@ -153,6 +155,11 @@ export default function Feed() {
           </article>
         );
       })}
+      {feed.length > shown && (
+        <button className="link" onClick={() => setShown((n) => n + PAGE_SIZE)}>
+          Show more ({Math.min(feed.length - shown, PAGE_SIZE)} of {feed.length - shown} left) →
+        </button>
+      )}
     </section>
   );
 }

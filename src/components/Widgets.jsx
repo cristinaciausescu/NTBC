@@ -75,6 +75,9 @@ export function WorkPackages() {
 
 const EFFORT_ORDER = { easy: 0, medium: 1, hard: 2 };
 
+// How many items the task list and the feed show before "Show more".
+const PAGE_SIZE = 15;
+
 // Sort modes for the full task list. Tasks without a due date go last when sorting by due date.
 const TASK_SORTS = {
   effort: {
@@ -90,10 +93,12 @@ const TASK_SORTS = {
 // Full task list, shown on the All tasks page only (not the dashboard).
 export function AllTasks({ completedIds = [] }) {
   const [sortKey, setSortKey] = useState('effort');
+  const [shown, setShown] = useState(PAGE_SIZE);
   const sorted = needsYou
     .filter((t) => !completedIds.includes(t.id))
     .sort(TASK_SORTS[sortKey].compare);
   const nextKey = sortKey === 'effort' ? 'due' : 'effort';
+  const remaining = sorted.length - shown;
   return (
     <section className="card">
       <div className="card-head">
@@ -103,7 +108,7 @@ export function AllTasks({ completedIds = [] }) {
         </button>
       </div>
       <ul className="task-list">
-        {sorted.map((item) => (
+        {sorted.slice(0, shown).map((item) => (
           <li key={item.id} className="task-li">
             <span className={`pill ${item.type === 'Action' ? 'pill-action' : 'pill-mention'}`}>{item.type}</span>
             <div className="task-li-body">
@@ -116,6 +121,11 @@ export function AllTasks({ completedIds = [] }) {
           </li>
         ))}
       </ul>
+      {remaining > 0 && (
+        <button className="link" onClick={() => setShown((n) => n + PAGE_SIZE)}>
+          Show more ({Math.min(remaining, PAGE_SIZE)} of {remaining} left) →
+        </button>
+      )}
     </section>
   );
 }

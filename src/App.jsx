@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import Header from './components/Header.jsx';
 import Sidebar from './components/Sidebar.jsx';
 import { SelectionPanel, PackagesCard } from './components/Packages.jsx';
-import { Banner, ProfileCard, WorkPackages, NeedsYou, AllTasks, Milestones, Feed, Badges, Missions, Leaderboard, Motivation } from './components/Widgets.jsx';
+import Feed from './components/Feed.jsx';
+import { Banner, ProfileCard, WorkPackages, NeedsYou, AllTasks, Milestones, Badges, Missions, Leaderboard, Motivation } from './components/Widgets.jsx';
 import { TasksPage, MilestonesPage } from './components/Pages.jsx';
 
 const STORAGE_KEY = 'ntbc-working-packages';

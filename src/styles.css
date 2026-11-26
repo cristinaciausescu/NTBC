@@ -19,6 +19,9 @@
 * { box-sizing: border-box; }
 body { margin: 0; }
 a { color: var(--blue); text-decoration: none; font-weight: 600; font-size: 14px; }
+button.link { background: none; border: 0; padding: 0; color: var(--blue); font-weight: 600; font-size: 14px; }
+.back { background: none; border: 0; color: var(--blue); font-weight: 600; padding: 0 0 12px; }
+.page { display: flex; flex-direction: column; gap: 16px; max-width: 900px; margin: 0 auto; }
 button { font: inherit; cursor: pointer; }
 h1, h2, h3 { margin: 0; }
 h2 { font-size: 18px; }

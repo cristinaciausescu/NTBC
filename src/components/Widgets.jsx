@@ -102,7 +102,7 @@ export function AllTasks() {
   );
 }
 
-export function NeedsYou() {
+export function NeedsYou({ onOpen }) {
   // Easiest tasks first, top 5 only; the row scrolls sideways for the rest of the top 5.
   const topFive = [...needsYou]
     .sort((a, b) => (EFFORT_ORDER[a.effort] ?? 1) - (EFFORT_ORDER[b.effort] ?? 1))
@@ -112,7 +112,7 @@ export function NeedsYou() {
     <section className="card">
       <div className="card-head">
         <h2>Needs you <span className="count">{topFive.length}</span></h2>
-        <a href="#">View all →</a>
+        <button className="link" onClick={() => onOpen?.('tasks')}>View all →</button>
       </div>
       <p className="muted">Easy wins first. Complete these to earn points!</p>
       <div className="task-row" role="list">
@@ -134,12 +134,12 @@ export function NeedsYou() {
   );
 }
 
-export function Milestones() {
+export function Milestones({ onOpen }) {
   return (
     <section className="card">
       <div className="card-head">
         <h2>Coming up</h2>
-        <a href="#">All milestones →</a>
+        <button className="link" onClick={() => onOpen?.('milestones')}>All milestones →</button>
       </div>
       <p className="muted">Turn tasks into achievements!</p>
       <ol className="timeline">

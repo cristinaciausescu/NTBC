@@ -1,7 +1,31 @@
+import { useState } from 'react';
 import Header from './components/Header.jsx';
 import { Banner, ProfileCard, WorkPackages, NeedsYou, AllTasks, Milestones, Feed, Badges, Missions, Leaderboard, Motivation } from './components/Widgets.jsx';
+import { TasksPage, MilestonesPage } from './components/Pages.jsx';
 
 export default function App() {
+  // 'dashboard' | 'tasks' | 'milestones'
+  const [view, setView] = useState('dashboard');
+  const back = () => setView('dashboard');
+
+  if (view === 'tasks') {
+    return (
+      <div className="app">
+        <Header />
+        <TasksPage onBack={back} />
+      </div>
+    );
+  }
+
+  if (view === 'milestones') {
+    return (
+      <div className="app">
+        <Header />
+        <MilestonesPage onBack={back} />
+      </div>
+    );
+  }
+
   return (
     <div className="app">
       <Header />
@@ -13,9 +37,9 @@ export default function App() {
 
         <div className="col col-center">
           <Banner />
-          <NeedsYou />
+          <NeedsYou onOpen={setView} />
           <AllTasks />
-          <Milestones />
+          <Milestones onOpen={setView} />
           <Feed />
         </div>
 

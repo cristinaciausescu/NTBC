@@ -74,6 +74,34 @@ export function WorkPackages() {
 
 const EFFORT_ORDER = { easy: 0, medium: 1, hard: 2 };
 
+// Full task list (all items, easiest first), shown below the top-5 row.
+export function AllTasks() {
+  const sorted = [...needsYou].sort(
+    (a, b) => (EFFORT_ORDER[a.effort] ?? 1) - (EFFORT_ORDER[b.effort] ?? 1),
+  );
+  return (
+    <section className="card">
+      <div className="card-head">
+        <h2>All tasks <span className="count">{sorted.length}</span></h2>
+      </div>
+      <ul className="task-list">
+        {sorted.map((item) => (
+          <li key={item.id} className="task-li">
+            <span className={`pill ${item.type === 'Action' ? 'pill-action' : 'pill-mention'}`}>{item.type}</span>
+            <div className="task-li-body">
+              <strong>{item.title}</strong>
+              <div className="muted small">{item.body}</div>
+            </div>
+            <span className={`effort effort-${item.effort}`}>{item.effort}</span>
+            {item.daysLeft && <span className="due">⏱ {item.daysLeft}d</span>}
+            <span className="task-li-xp">🏆 {item.xp} XP</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 export function NeedsYou() {
   // Easiest tasks first, top 5 only; the row scrolls sideways for the rest of the top 5.
   const topFive = [...needsYou]

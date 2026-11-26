@@ -1,5 +1,5 @@
 import Header from './components/Header.jsx';
-import { Banner, ProfileCard, WorkPackages, NeedsYou, Milestones, Feed, Badges, Missions, Leaderboard, Motivation } from './components/Widgets.jsx';
+import { Banner, ProfileCard, WorkPackages, NeedsYou, AllTasks, Milestones, Feed, Badges, Missions, Leaderboard, Motivation } from './components/Widgets.jsx';
 
 export default function App() {
   return (
@@ -14,6 +14,7 @@ export default function App() {
         <div className="col col-center">
           <Banner />
           <NeedsYou />
+          <AllTasks />
           <Milestones />
           <Feed />
         </div>

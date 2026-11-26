@@ -72,19 +72,27 @@ export function WorkPackages() {
   );
 }
 
+const EFFORT_ORDER = { easy: 0, medium: 1, hard: 2 };
+
 export function NeedsYou() {
+  // Easiest tasks first, top 5 only; the row scrolls sideways for the rest of the top 5.
+  const topFive = [...needsYou]
+    .sort((a, b) => (EFFORT_ORDER[a.effort] ?? 1) - (EFFORT_ORDER[b.effort] ?? 1))
+    .slice(0, 5);
+
   return (
     <section className="card">
       <div className="card-head">
-        <h2>Needs you <span className="count">{needsYou.length}</span></h2>
+        <h2>Needs you <span className="count">{topFive.length}</span></h2>
         <a href="#">View all →</a>
       </div>
-      <p className="muted">Complete these to earn points!</p>
-      <div className="task-row">
-        {needsYou.map((item) => (
-          <article key={item.id} className="task">
+      <p className="muted">Easy wins first. Complete these to earn points!</p>
+      <div className="task-row" role="list">
+        {topFive.map((item) => (
+          <article key={item.id} className="task" role="listitem">
             <div className="task-meta">
               <span className={`pill ${item.type === 'Action' ? 'pill-action' : 'pill-mention'}`}>{item.type}</span>
+              <span className={`effort effort-${item.effort}`}>{item.effort}</span>
               {item.daysLeft && <span className="due">⏱ {item.daysLeft} days left</span>}
             </div>
             <h3>{item.title}</h3>

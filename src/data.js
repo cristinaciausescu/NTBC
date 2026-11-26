@@ -16,6 +16,7 @@ export const workPackages = [
   { id: "crowsnest", name: "Crowsnest", progress: 20, xp: 50, color: "green" },
 ];
 
+// effort: "easy" | "medium" | "hard" — easy tasks are shown first
 export const needsYou = [
   {
     id: 1,
@@ -24,6 +25,7 @@ export const needsYou = [
     body: "Solution Work Package review",
     daysLeft: 2,
     xp: 20,
+    effort: "hard",
   },
   {
     id: 2,
@@ -31,6 +33,7 @@ export const needsYou = [
     title: "Milestone commentary",
     body: "Steve Ball has requested commentary",
     xp: 15,
+    effort: "medium",
   },
   {
     id: 3,
@@ -38,6 +41,39 @@ export const needsYou = [
     title: "McCartney B mention you",
     body: "Hi there Duncan, can you submit X, Y and Z before the end of the day?",
     xp: 10,
+    effort: "easy",
+  },
+  {
+    id: 4,
+    type: "Mention",
+    title: "Reply to Murphy D",
+    body: "Confirm the Solution Work Package is ready for review",
+    xp: 5,
+    effort: "easy",
+  },
+  {
+    id: 5,
+    type: "Action",
+    title: "Approve timesheet",
+    body: "Sharpview — 3 entries waiting",
+    xp: 8,
+    effort: "easy",
+  },
+  {
+    id: 6,
+    type: "Action",
+    title: "Update MSET status",
+    body: "Add progress for the Data Validation milestone",
+    xp: 12,
+    effort: "medium",
+  },
+  {
+    id: 7,
+    type: "Action",
+    title: "Crowsnest audit",
+    body: "Full review of open items and dependencies",
+    xp: 25,
+    effort: "hard",
   },
 ];
 

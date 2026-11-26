@@ -139,13 +139,18 @@ h3 { font-size: 15px; margin-top: 8px; }
 .task-row {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(200px, 1fr);
+  grid-auto-columns: 240px;
   gap: 12px;
   margin-top: 14px;
-  overflow-x: auto;
+  overflow-x: scroll;            /* always show the bar, even when the cards fit */
   scroll-snap-type: x mandatory;
-  padding-bottom: 6px;
+  padding-bottom: 12px;          /* room for the bar under the cards */
+  scrollbar-width: thin;         /* Firefox */
+  scrollbar-color: var(--blue) #e5e9f2;
 }
+.task-row::-webkit-scrollbar { height: 8px; }             /* Chrome, Edge, Safari */
+.task-row::-webkit-scrollbar-track { background: #e5e9f2; border-radius: 999px; }
+.task-row::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 999px; }
 .task {
   border: 1px solid var(--border); border-radius: 12px; padding: 14px;
   display: flex; flex-direction: column; gap: 6px;

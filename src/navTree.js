@@ -1,5 +1,33 @@
-// Left-hand index. Each node has a label, optional children, and an optional id.
-// Leaf nodes with an id are work items (e.g. "110013600-01 - BAHRAIN HAWK SYSTEM UPGRADE").
+import { needsYou, milestones } from './data.js';
+
+// Left-hand index. Each node has an id and a label. Nodes with children are groups.
+// Leaves with a `kind` ("task" or "milestone") can be picked to build a working package.
+
+const taskLeaves = (prefix) =>
+  needsYou.map((t) => ({
+    id: `${prefix}-task-${t.id}`,
+    label: t.title,
+    kind: 'task',
+    meta: { title: t.title, type: t.type, effort: t.effort, xp: t.xp },
+  }));
+
+const milestoneLeaves = (prefix) =>
+  milestones.map((m) => ({
+    id: `${prefix}-ms-${m.id}`,
+    label: `${m.label} (${m.count})`,
+    kind: 'milestone',
+    meta: { title: m.label, sub: m.sub, xp: m.xp },
+  }));
+
+// A work item groups its own Tasks and Milestones.
+const workItem = (id, label) => ({
+  id,
+  label,
+  children: [
+    { id: `${id}-tasks`, label: 'Tasks', children: taskLeaves(id) },
+    { id: `${id}-milestones`, label: 'Milestones', children: milestoneLeaves(id) },
+  ],
+});
 
 export const navTree = [
   {
@@ -23,9 +51,7 @@ export const navTree = [
                   {
                     id: 'bahrain',
                     label: 'Bahrain',
-                    children: [
-                      { id: '110013600-01', label: '110013600-01 - BAHRAIN HAWK SYSTEM UPGRADE' },
-                    ],
+                    children: [workItem('110013600-01', '110013600-01 - BAHRAIN HAWK SYSTEM UPGRADE')],
                   },
                 ],
               },
@@ -47,9 +73,7 @@ export const navTree = [
               {
                 id: 'sharpview',
                 label: 'Sharp View',
-                children: [
-                  { id: '110013255_CA', label: '110013255_CA - SHARPVIEW HD TI CAMERA' },
-                ],
+                children: [workItem('110013255_CA', '110013255_CA - SHARPVIEW HD TI CAMERA')],
               },
             ],
           },

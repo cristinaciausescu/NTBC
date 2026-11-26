@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   user,
   workPackages,
@@ -74,17 +75,32 @@ export function WorkPackages() {
 
 const EFFORT_ORDER = { easy: 0, medium: 1, hard: 2 };
 
-// Full task list (all items, easiest first), shown below the top-5 row.
+// Sort modes for the full task list. Tasks without a due date go last when sorting by due date.
+const TASK_SORTS = {
+  effort: {
+    label: 'Easiest first',
+    compare: (a, b) => (EFFORT_ORDER[a.effort] ?? 1) - (EFFORT_ORDER[b.effort] ?? 1),
+  },
+  due: {
+    label: 'Due soonest',
+    compare: (a, b) => (a.daysLeft ?? 9999) - (b.daysLeft ?? 9999),
+  },
+};
+
+// Full task list, shown on the All tasks page only (not the dashboard).
 export function AllTasks({ completedIds = [] }) {
+  const [sortKey, setSortKey] = useState('effort');
   const sorted = needsYou
     .filter((t) => !completedIds.includes(t.id))
-    .sort(
-    (a, b) => (EFFORT_ORDER[a.effort] ?? 1) - (EFFORT_ORDER[b.effort] ?? 1),
-  );
+    .sort(TASK_SORTS[sortKey].compare);
+  const nextKey = sortKey === 'effort' ? 'due' : 'effort';
   return (
     <section className="card">
       <div className="card-head">
         <h2>All tasks <span className="count">{sorted.length}</span></h2>
+        <button className="link" onClick={() => setSortKey(nextKey)}>
+          Sort: {TASK_SORTS[sortKey].label} →
+        </button>
       </div>
       <ul className="task-list">
         {sorted.map((item) => (

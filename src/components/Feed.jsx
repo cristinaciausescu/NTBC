@@ -22,6 +22,7 @@ export default function Feed() {
   const [{ liked, replies }, setActivity] = useState(loadActivity);
   const [openReply, setOpenReply] = useState(null); // postId whose reply box is open
   const [draft, setDraft] = useState('');
+  const [expanded, setExpanded] = useState({}); // postId -> comments list open
 
   useEffect(() => {
     try {
@@ -42,6 +43,9 @@ export default function Feed() {
     setOpenReply((current) => (current === id ? null : id));
   };
 
+  const toggleComments = (id) =>
+    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+
   const sendReply = (id) => {
     const text = draft.trim();
     if (!text) return;
@@ -54,6 +58,7 @@ export default function Feed() {
     }));
     setDraft('');
     setOpenReply(null);
+    setExpanded((prev) => ({ ...prev, [id]: true })); // show the reply just sent
   };
 
   return (
@@ -66,6 +71,7 @@ export default function Feed() {
         const postReplies = replies[post.id] ?? [];
         const totalComments = seededComments.length + postReplies.length;
         const isReplying = openReply === post.id;
+        const isExpanded = Boolean(expanded[post.id]);
 
         return (
           <article key={post.id} className="post">
@@ -91,11 +97,20 @@ export default function Feed() {
                   aria-expanded={isReplying}
                   onClick={() => toggleReply(post.id)}
                 >
-                  💬 Reply{totalComments > 0 ? ` (${totalComments})` : ''}
+                  💬 Reply
                 </button>
+                {totalComments > 0 && (
+                  <button
+                    className="action"
+                    aria-expanded={isExpanded}
+                    onClick={() => toggleComments(post.id)}
+                  >
+                    {isExpanded ? 'Hide comments' : `Show comments (${totalComments})`}
+                  </button>
+                )}
               </div>
 
-              {seededComments.length > 0 && (
+              {isExpanded && seededComments.length > 0 && (
                 <ul className="replies">
                   {seededComments.map((c) => (
                     <li key={`seed-${c.id}`}>
@@ -106,7 +121,7 @@ export default function Feed() {
                 </ul>
               )}
 
-              {postReplies.length > 0 && (
+              {isExpanded && postReplies.length > 0 && (
                 <ul className="replies">
                   {postReplies.map((r) => (
                     <li key={r.id}>

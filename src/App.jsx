@@ -16,6 +16,11 @@ export default function App() {
   // Items picked in the index: { [nodeId]: { id, label, kind, meta } }
   const [picked, setPicked] = useState({});
 
+  // Task ids the user has completed. Completed tasks leave "Needs you".
+  const [completedIds, setCompletedIds] = useState([]);
+  const completeTask = (id) =>
+    setCompletedIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
+
   // Working packages, saved in this browser.
   const [packages, setPackages] = useState(() => {
     try {
@@ -83,7 +88,7 @@ export default function App() {
             onClear={() => setPicked({})}
           />
           <Banner />
-          <NeedsYou onOpen={setView} />
+          <NeedsYou onOpen={setView} completedIds={completedIds} onComplete={completeTask} />
           <AllTasks />
           <Milestones onOpen={setView} />
           <Feed />

@@ -102,10 +102,12 @@ export function AllTasks() {
   );
 }
 
-export function NeedsYou({ onOpen }) {
-  // Easiest tasks first, top 5 only; the row scrolls sideways for the rest of the top 5.
-  const topFive = [...needsYou]
-    .sort((a, b) => (EFFORT_ORDER[a.effort] ?? 1) - (EFFORT_ORDER[b.effort] ?? 1))
+export function NeedsYou({ onOpen, completedIds = [], onComplete }) {
+  // Open tasks only, newest first (by createdAt), top 5.
+  // Completing a task removes it here and the next newest open task takes its place.
+  const topFive = needsYou
+    .filter((t) => !completedIds.includes(t.id))
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 5);
 
   return (
@@ -114,7 +116,7 @@ export function NeedsYou({ onOpen }) {
         <h2>Needs you <span className="count">{topFive.length}</span></h2>
         <button className="link" onClick={() => onOpen?.('tasks')}>View all →</button>
       </div>
-      <p className="muted">Easy wins first. Complete these to earn points!</p>
+      <p className="muted">Newest first. Complete these to earn points!</p>
       <div className="task-row" role="list">
         {topFive.map((item) => (
           <article key={item.id} className="task" role="listitem">
@@ -126,6 +128,7 @@ export function NeedsYou({ onOpen }) {
             <h3>{item.title}</h3>
             <p className="muted small">{item.body}</p>
             <div className="task-xp">🏆 {item.xp} XP</div>
+            <button className="link" onClick={() => onComplete?.(item.id)}>Mark done ✓</button>
             <a
               href="#tasks"
               onClick={(e) => {

@@ -68,7 +68,7 @@ export default function App() {
 
   let content;
   if (view === 'tasks') {
-    content = <TasksPage onBack={back} />;
+    content = <TasksPage onBack={back} completedIds={completedIds} />;
   } else if (view === 'milestones') {
     content = <MilestonesPage onBack={back} />;
   } else {
@@ -89,7 +89,7 @@ export default function App() {
           />
           <Banner />
           <NeedsYou onOpen={setView} completedIds={completedIds} onComplete={completeTask} />
-          <AllTasks />
+          <AllTasks completedIds={completedIds} />
           <Milestones onOpen={setView} />
           <Feed />
         </div>

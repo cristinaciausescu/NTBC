@@ -2,11 +2,11 @@ import { milestones } from '../data.js';
 import { AllTasks } from './Widgets.jsx';
 
 // Full-page view of all tasks, opened from "Needs you → View all".
-export function TasksPage({ onBack }) {
+export function TasksPage({ onBack, completedIds }) {
   return (
     <div className="page">
       <button className="back" onClick={onBack}>← Back to dashboard</button>
-      <AllTasks />
+      <AllTasks completedIds={completedIds} />
     </div>
   );
 }
